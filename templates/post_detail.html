@@ -12,6 +12,5 @@
             <p class="article-content">{{ object.content }}</p>
         </div>
     </article>
-
-
+    <p><a href="{% url 'like-post' object.id %}"><i class="fa fa-thumbs-up pl-10" aria-hidden="true"></i></a>{{ object.like_set.all.count }}</p>
 {% endblock %}

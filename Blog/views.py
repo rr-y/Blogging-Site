@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Post
 from .models import Like
-
+from django.contrib.auth.models import User
+from notifications.signals import notify
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView,
                                   CreateView,
@@ -74,10 +75,16 @@ def like_post(request, id):
         if not user:
             post.like_set.create(user=request.user)
             post.save()
-
+            notify.send(request.user, recipient=post.author, verb=f'has liked your post')
         else:
             Like.objects.filter(user=request.user, post=post).delete()
     return redirect('blog-home')
+
+
+def user_notify(request, id):
+    user = User.objects.get(id = id)
+    n = user.notifications.all()
+    return render(request, "notification.html", {"n": n})
 
 
 def home(request):

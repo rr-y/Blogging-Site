@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load notifications_tags %}
+
+
+{% block content %}
+    {% notifications_unread as unread_count %}
+            {% if unread_count %}
+                <p>You have <strong>{{ unread_count }}</strong> unread notifications.</p>
+            {% endif %}
+
+    {% if unread_count %}
+        {% for foo in n %}
+            <p>{{ foo }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
